@@ -1,0 +1,43 @@
+# We run this test using `should_exist` because the path is included in the
+# IDX file.
+- name: gatk4 indexfeaturefile bed
+  command: nextflow run ./tests/software/gatk4/indexfeaturefile -entry test_gatk4_indexfeaturefile_bed -c tests/config/nextflow.config
+  tags:
+    - gatk4
+    - gatk4_indexfeaturefile
+    - gatk4_indexfeaturefile_bed
+  files:
+    - path: output/gatk4/test.bed.idx
+      should_exist: true
+
+- name: gatk4 indexfeaturefile bed gz
+  command: nextflow run ./tests/software/gatk4/indexfeaturefile -entry test_gatk4_indexfeaturefile_bed_gz -c tests/config/nextflow.config
+  tags:
+    - gatk4
+    - gatk4_indexfeaturefile
+    - gatk4_indexfeaturefile_bed_gz
+  files:
+    - path: output/gatk4/test.bed.gz.tbi
+      md5sum: 7090a290811a53f3f87f1378094729e9
+
+# We run this test using `should_exist` because the path is included in the
+# IDX file.
+- name: gatk4 indexfeaturefile vcf
+  command: nextflow run ./tests/software/gatk4/indexfeaturefile -entry test_gatk4_indexfeaturefile_vcf -c tests/config/nextflow.config
+  tags:
+    - gatk4
+    - gatk4_indexfeaturefile
+    - gatk4_indexfeaturefile_vcf
+  files:
+    - path: output/gatk4/test.vcf.idx
+      should_exist: true
+
+- name: gatk4 indexfeaturefile vcf gz
+  command: nextflow run ./tests/software/gatk4/indexfeaturefile -entry test_gatk4_indexfeaturefile_vcf_gz -c tests/config/nextflow.config
+  tags:
+    - gatk4
+    - gatk4_indexfeaturefile
+    - gatk4_indexfeaturefile_vcf_gz
+  files:
+    - path: output/gatk4/test.vcf.gz.tbi
+      md5sum: 072b8841da975bc9ef1db233b178b8e2
