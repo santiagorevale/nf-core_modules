@@ -202,6 +202,14 @@ gatk4_fastqtosam:
   - software/gatk4/fastqtosam/**
   - tests/software/gatk4/fastqtosam/**
 
+gatk4_genotypegvcfs:
+  - software/gatk4/genotypegvcfs/**
+  - tests/software/gatk4/genotypegvcfs/**
+
+gatk4_indexfeaturefile:
+  - software/gatk4/indexfeaturefile/**
+  - tests/software/gatk4/indexfeaturefile/**
+
 gatk4_mergebamalignment:
   - software/gatk4/mergebamalignment/**
   - tests/software/gatk4/mergebamalignment/**
