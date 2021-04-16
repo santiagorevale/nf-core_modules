@@ -298,11 +298,13 @@ We have implemented a number of commands in the `nf-core/tools` package to make 
 
 In order to test that each module added to `nf-core/modules` is actually working and to be able to track any changes to results files between module updates we have set-up a number of Github Actions CI tests to run each module on a minimal test dataset using Docker, Singularity and Conda.
 
-- All test data for `nf-core/modules` MUST be added to [`tests/data/`](tests/data/) and organised by filename extension.
+- All test data for `nf-core/modules` MUST be added to the `modules` branch of [`nf-core/test-datasets`](https://github.com/nf-core/test-datasets/tree/modules/data) and organised by filename extension.
 
-- In order to keep the size of this repository as minimal as possible, pre-existing files from [`tests/data/`](tests/data/) MUST be reused if at all possible.
+- In order to keep the size of this repository as minimal as possible, pre-existing files from [`nf-core/test-datasets`](https://github.com/nf-core/test-datasets/tree/modules/data) MUST be reused if at all possible.
 
 - Test files MUST be kept as tiny as possible.
+
+- If the appropriate test data doesn't exist in the `modules` branch of [`nf-core/test-datasets`](https://github.com/nf-core/test-datasets/tree/modules/data) please contact us on the [nf-core Slack `#modules` channel](https://nfcore.slack.com/channels/modules) (you can join with [this invite](https://nf-co.re/join/slack)) to discuss possible options.
 
 ### Running tests manually
 
@@ -435,6 +437,32 @@ using a combination of `bwa` and `samtools` to output a BAM file instead of a SA
     > NB: Build information for all tools within a multi-tool container can be obtained in the `/usr/local/conda-meta/history` file within the container.
 
 - It is also possible for a new multi-tool container to be built and added to BioContainers by submitting a pull request on their [`multi-package-containers`](https://github.com/BioContainers/multi-package-containers) repository.
+    - Fork the [multi-package-containers repository](https://github.com/BioContainers/multi-package-containers)
+    - Make a change to the `hash.tsv` file in the `combinations` directory see [here](https://github.com/aunderwo/multi-package-containers/blob/master/combinations/hash.tsv#L124) for an example where `pysam=0.16.0.1,biopython=1.78` was added.
+    - Commit the code and then make a pull request to the original repo, for [example](https://github.com/BioContainers/multi-package-containers/pull/1661)
+    - Once the PR has been accepted a container will get built and you can find it using  a search tool in the `galaxy-tool-util conda` package
+
+      ```console
+      mulled-search --destination quay singularity conda  --search pysam biopython  | grep "mulled"
+      quay         mulled-v2-3a59640f3fe1ed11819984087d31d68600200c3f  185a25ca79923df85b58f42deb48f5ac4481e91f-0  docker pull quay.io/biocontainers/mulled-v2-3a59640f3fe1ed11819984087d31d68600200c3f:185a25ca79923df85b58f42deb48f5ac4481e91f-0
+      singularity  mulled-v2-3a59640f3fe1ed11819984087d31d68600200c3f  185a25ca79923df85b58f42deb48f5ac4481e91f-0  wget https://depot.galaxyproject.org/singularity/mulled-v2-3a59640f3fe1ed11819984087d31d68600200c3f:185a25ca79923df85b58f42deb48f5ac4481e91f-0
+      ```
+
+    - You can copy and paste the `mulled-*` path into the relevant Docker and Singularity lines in the Nextflow `process` definition of your module
+    - To confirm that this is correct. Spin up a temporary Docker container
+
+      ```console
+      docker run --rm -it quay.io/biocontainers/mulled-v2-3a59640f3fe1ed11819984087d31d68600200c3f:185a25ca79923df85b58f42deb48f5ac4481e91f-0  /bin/sh
+      ```
+
+      And in the command prompt type
+
+      ```console
+      $ grep specs /usr/local/conda-meta/history
+      # update specs: ['biopython=1.78', 'pysam=0.16.0.1']
+      ```
+
+      The packages should reflect those added to the multi-package-containers repo `hash.tsv` file
 
 - If the software is not available on Bioconda a `Dockerfile` MUST be provided within the module directory. We will use GitHub Actions to auto-build the containers on the [GitHub Packages registry](https://github.com/features/packages).
 
@@ -514,4 +542,6 @@ nextflow run /path/to/pipeline/ -c /path/to/custom_module.conf
 > Note that the nf-core/tools helper package has a `download` command to download all required pipeline
 > files + singularity containers + institutional configs + modules in one go for you, to make this process easier.
 
+# New test data created for the module- sequenzautils/bam2seqz
+The new test data is an output from another module- sequenzautils/bcwiggle- (which uses sarscov2 genome fasta file as an input).
 -->
